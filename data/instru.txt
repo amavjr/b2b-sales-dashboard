@@ -1,0 +1,155 @@
+You have Tableau open and your data is loaded. I can see the four sheets from your Excel file:
+
+    Raw Orders
+
+    Rep Summary
+
+    Product Summary
+
+    Monthly Trend
+
+Now let's build the dashboard.
+Step 1: Create Calculated Fields
+
+First, click on "Sheet 1" at the bottom to start a new worksheet.
+
+Then, in the Data pane on the left, click the dropdown arrow next to "Search" and select "Create Calculated Field"
+Calculated Field 1: Won Revenue
+
+Name: Won Revenue
+
+Formula:
+text
+
+IF [Deal_Stage] = "Closed Won" THEN [Revenue] ELSE 0 END
+
+Click OK
+Calculated Field 2: Win Rate
+
+Name: Win Rate
+
+Formula:
+text
+
+SUM(IF [Deal_Stage] = "Closed Won" THEN 1 ELSE 0 END) / COUNT([Order_ID])
+
+Click OK
+Calculated Field 3: Profit Margin Pct
+
+Name: Profit Margin Pct
+
+Formula:
+text
+
+SUM([Profit]) / SUM([Revenue])
+
+Click OK
+Step 2: Create KPI Sheets
+
+Click the "New Worksheet" tab (looks like a sheet of paper with a plus sign) to create each of these:
+Sheet: KPI Revenue
+Action	Instruction
+1	Rename the sheet: right-click the tab → "Rename" → type KPI Revenue
+2	In the Marks card, change "Automatic" to Text
+3	Drag Won Revenue to the Text card
+4	Right-click the number → Format → Numbers → Currency → 0 decimals
+5	Double-click the title at top → type TOTAL REVENUE
+Sheet: KPI Win Rate
+Action	Instruction
+1	New Worksheet → rename KPI Win Rate
+2	Marks type → Text
+3	Drag Win Rate to Text
+4	Format → Numbers → Percentage → 1 decimal
+5	Title: WIN RATE
+Sheet: KPI Profit Margin
+Action	Instruction
+1	New Worksheet → rename KPI Profit Margin
+2	Marks type → Text
+3	Drag Profit Margin Pct to Text
+4	Format → Numbers → Percentage → 1 decimal
+5	Title: PROFIT MARGIN
+Sheet: KPI Orders
+Action	Instruction
+1	New Worksheet → rename KPI Orders
+2	Marks type → Text
+3	Drag Order_ID to Text
+4	Change aggregation to Count (click Order_ID → Measure → Count)
+5	Format → Numbers → Number (with commas)
+6	Title: TOTAL ORDERS
+Step 3: Create Revenue Map
+
+New Worksheet → rename Revenue Map
+Action	Instruction
+1	Double-click Region
+2	Drag Won Revenue to Color
+3	In Marks card, change to Filled Map
+4	Drag Region to Label
+5	Drag Deal_Stage to Filters → check only "Closed Won" → OK
+Step 4: Create Monthly Trend
+
+New Worksheet → rename Monthly Trend
+Action	Instruction
+1	Drag Order_Date to Columns
+2	Right-click Order_Date on Columns → select Month (blue pill, discrete)
+3	Drag Won Revenue to Rows
+4	In Marks card, change to Line
+5	Drag Year(Order_Date) to Color
+6	Drag Deal_Stage to Filters → check "Closed Won" → OK
+Step 5: Create Product Performance
+
+New Worksheet → rename Product Performance
+Action	Instruction
+1	Drag Product to Rows
+2	Drag Won Revenue to Columns
+3	Click the sort icon (descending)
+4	Drag Profit Margin Pct to Color
+5	Filter: Deal_Stage = Closed Won
+Step 6: Create Rep Scorecard
+
+New Worksheet → rename Rep Scorecard
+Action	Instruction
+1	Drag Sales_Rep to Rows
+2	Drag Won Revenue to Columns
+3	Drag Win Rate to Columns (adds second axis)
+4	Right-click the second axis → Dual Axis
+5	In Marks card, click the first (Won Revenue) → change to Bar
+6	Click the second (Win Rate) → change to Circle
+7	Filter: Deal_Stage = Closed Won
+8	Sort by Won Revenue descending
+Step 7: Build the Dashboard
+
+Click the "New Dashboard" tab (looks like a grid)
+Action	Instruction
+1	In Dashboard pane, set Size to Fixed → 1400 x 900
+2	Drag a Text object from left pane to the top of canvas
+3	Type: B2B Sales Dashboard | Angel Mavarez → Font size 20, bold
+4	Drag the 4 KPI sheets to the top row (below title)
+5	Drag Revenue Map below KPIs (left side)
+6	Drag Monthly Trend next to the map (right side)
+7	Drag Product Performance below left
+8	Drag Rep Scorecard below right
+Step 8: Add Interactivity
+Action	Instruction
+1	Dashboard → Actions → Add Action → Filter
+2	Name: Region Filter
+3	Source Sheets: Revenue Map
+4	Target Sheets: All sheets
+5	Run action on: Select
+6	Click OK
+Step 9: Save and Export
+Action	Instruction
+1	File → Save As
+2	Navigate to: C:\Users\Moon 44\Documents\Github\b2b-sales-dashboard\docs\
+3	File name: B2B_Sales_Dashboard.twbx
+4	Click Save
+5	Dashboard → Export Image
+6	Save to: C:\Users\Moon 44\Documents\Github\b2b-sales-dashboard\docs\dashboard_preview.png
+Step 10: Push to GitHub
+
+In PowerShell:
+powershell
+
+cd "C:\Users\Moon 44\Documents\Github\b2b-sales-dashboard"
+git add docs/
+git commit -m "Add Tableau dashboard and preview image"
+git push origin main
